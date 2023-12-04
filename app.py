@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import pandasai as pai
 from pandasai.llm import OpenAI
 from pandasai import Agent
 from pandasai.responses.streamlit_response import StreamlitResponse
@@ -14,11 +15,18 @@ def main():
 
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
+    agent = None
+
     uploaded_file = st.file_uploader("Upload a CSV file for analysis", type=["csv"])
 
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
+
+    if st.sidebar.button("New Conversation") and agent:
+        agent.start_new_conversation()
+    if st.sidebar.button("Clear Cache") and agent:
+        pai.clear_cache()
 
     llm = OpenAI(api_token=openai_api_key)
 
@@ -43,9 +51,6 @@ def main():
                         st.write(response)
             else:
                 st.warning("Please enter a prompt.")
-        if st.button("New Conversation"):
-            agent.start_new_conversation()
-
 
 if __name__ == "__main__":
     main()
