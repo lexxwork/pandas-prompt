@@ -9,3 +9,4 @@ etc
 *.txt
 *.csv
 debug.py
+!requirements.txt
