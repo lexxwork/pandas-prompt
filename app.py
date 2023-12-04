@@ -10,7 +10,7 @@ import logger
 
 
 def main():
-    log = logger.setup_logger("app_logger", "app.log", logging.WARNING)
+    log = logger.setup_logger("app_logger", "app.log", logging.CRITICAL)
     st.title("Prompt-driven data analysis with PandasAI")
 
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
@@ -35,7 +35,12 @@ def main():
         agent = Agent(
             [df],
             memory_size=10,
-            config={"llm": llm, "max_retries": 2, "response_parser": StreamlitResponse},
+            config={
+                "llm": llm,
+                "max_retries": 2,
+                "response_parser": StreamlitResponse,
+                "logger": None,
+            },
         )
         st.write(df.head(3))
         prompt = st.text_area("Enter your prompt:")
@@ -51,6 +56,7 @@ def main():
                         st.write(response)
             else:
                 st.warning("Please enter a prompt.")
+
 
 if __name__ == "__main__":
     main()
