@@ -50,7 +50,7 @@ def main():
                 with st.spinner("Generating response..."):
                     response = agent.chat(prompt)
                     log.info(f"Generated response for prompt: {prompt}")
-                    if "temp_chart.png" in response:
+                    if type(response) == str and "temp_chart.png" in response:
                         st.image(response)
                     else:
                         st.write(response)
